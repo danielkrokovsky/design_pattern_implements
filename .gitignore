@@ -1,0 +1,21 @@
+# Compiled class files
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files
+*.jar
+*.war
+*.ear
+*.nar
+
+# Virtual machine crash logs, see www.java.com
+hs_err_pid*
+/bin
+/report
+/target
+*.csv
+.settings/
+.DS_Store
+.classpath
