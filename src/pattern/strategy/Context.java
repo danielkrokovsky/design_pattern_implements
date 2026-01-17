@@ -1,0 +1,14 @@
+package pattern.strategy;
+
+public class Context {
+
+	private IChoice myC;
+
+	public void SetChoice(IChoice ic) {
+		myC = ic;
+	}
+
+	public void ShowChoice(String s1, String s2) {
+		myC.myChoice(s1, s2);
+	}
+}
