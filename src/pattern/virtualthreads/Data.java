@@ -3,70 +3,21 @@ package pattern.virtualthreads;
 
 public class Data {
 	
-	private String Year,Age,Ethnic,Sex,Area,count;
+	private String year;
+	private String age;
+	private String ethnic;
+	private String sex;
+	private String area;
+	private String count;
 	
 	public Data(Builder builder) {
 
-		Year = builder.year;
-		Age = builder.age;
-		Ethnic = builder.ethnic;
-		Sex = builder.sex;
-		Area = builder.area;
-	}
-
-	public String getEthnic() {
-		return Ethnic;
-	}
-
-	public void setEthnic(String ethnic) {
-		Ethnic = ethnic;
-	}
-
-	public String getSex() {
-		return Sex;
-	}
-
-	public void setSex(String sex) {
-		Sex = sex;
-	}
-
-	public String getArea() {
-		return Area;
-	}
-
-	public void setArea(String area) {
-		Area = area;
-	}
-
-	public String getCount() {
-		return count;
-	}
-
-	public void setCount(String count) {
-		this.count = count;
-	}
-
-	public Data(String year,String Age) {
-		super();
-		this.Year = year;
-		this.Age = Age;
-		
-	}
-
-	public String getYear() {
-		return Year;
-	}
-
-	public void setYear(String year) {
-		Year = year;
-	}
-
-	public String getAge() {
-		return Age;
-	}
-
-	public void setAge(String age) {
-		Age = age;
+		this.year = builder.year;
+		this.age = builder.age;
+		this.ethnic = builder.ethnic;
+		this.sex = builder.sex;
+		this.area = builder.area;
+		this.count = builder.count;
 	}
 
 public static class Builder {
@@ -122,6 +73,7 @@ public static class Builder {
 	public Data build() { // Método para construir o objeto
         return new Data(this);
     }
+
   }
 }
 
