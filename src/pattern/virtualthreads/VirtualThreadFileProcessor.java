@@ -9,6 +9,7 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -25,30 +26,29 @@ public class VirtualThreadFileProcessor {
 	private Path filePath = Paths.get("teste.csv");
 
 	public void processLargeFile(String file) throws IOException {
+		
+		List<Data> records = new ArrayList<>();
+		String delimiter = ",";
+		
 		try (var _ = Executors.newVirtualThreadPerTaskExecutor()) {
 			
-	        String delimiter = ",";
-
-	        // Use a try-with-resources block to ensure the stream is closed automatically
 	        try (Stream<String> lines = Files.lines(Paths.get(s))) {
-	            List<Data> records = lines
-	                // Optional: skip the header line if your CSV has one
+	            records = lines
 	                .skip(1)
 	                .map(line -> line.split(delimiter))
-	                .map(n -> new Data(n[0]))
+	                .map(n -> new Data.Builder(n[0], n[1], n[2], n[3], n[4], n[5]).build())
 	                .collect(Collectors.toList());
-	            
-	            System.out.println(records);
+	            	            
+	            System.out.println(records.size());   
 	                
 
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	        }
 	    }
-
+		
+		System.out.println(records.get(0));
 	}
-	
-	
 	
 	@SuppressWarnings("unused")
 	private void processLargeFileChannel(String file) throws IOException {
