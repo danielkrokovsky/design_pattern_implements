@@ -9,6 +9,8 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -26,74 +28,66 @@ public class VirtualThreadFileProcessor {
 	private Path filePath = Paths.get("teste.csv");
 
 	public void processLargeFile(String file) throws IOException {
-		
+
 		List<Data> records = new ArrayList<>();
 		String delimiter = ",";
-		
-		try (var _ = Executors.newVirtualThreadPerTaskExecutor()) {
-			
-	        try (Stream<String> lines = Files.lines(Paths.get(s))) {
-	            records = lines
-	                .skip(1)
-	                .map(line -> line.split(delimiter))
-	                .map(n -> new Data.Builder(n[0], n[1], n[2], n[3], n[4], n[5]).build())
-	                .collect(Collectors.toList());
-	            	            
-	            System.out.println(records.size());   
-	                
 
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
-	    }
-		
+		try (var _ = Executors.newVirtualThreadPerTaskExecutor()) {
+
+			try (Stream<String> lines = Files.lines(Paths.get(s))) {
+				records = lines.skip(1).map(line -> line.split(delimiter))
+						.map(n -> new Data.Builder(n[0], n[1], n[2], n[3], n[4], n[5]).build())
+						.collect(Collectors.toList());
+
+				System.out.println(records.size());
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
 		System.out.println(records.get(0));
 	}
-	
+
 	@SuppressWarnings("unused")
 	private void processLargeFileChannel(String file) throws IOException {
 		try (RandomAccessFile reader = new RandomAccessFile(s, "r");
-		        FileChannel channel = reader.getChannel();
-		        ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+				FileChannel channel = reader.getChannel();
+				ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
-		        int bufferSize = 2048;
-		        if (bufferSize > channel.size()) {
-		           bufferSize = (int) channel.size();
-		        }
-		        ByteBuffer buff = ByteBuffer.allocate(bufferSize);
+			int bufferSize = 2 * 4096;
+			if (bufferSize > channel.size()) {
+				bufferSize = (int) channel.size();
+			}
+			ByteBuffer buff = ByteBuffer.allocate(bufferSize);
 
-		        while (channel.read(buff) > 0) {
-		            out.write(buff.array(), 0, buff.position());
-		            buff.clear();
-		        }
-		        
-		     //Files.write(filePath, out.toByteArray());
-		     processLargeFile("");
-		     
-		     
+			while (channel.read(buff) > 0) {
+				out.write(buff.array(), 0, buff.position());
+				buff.clear();
+			}
+
+			// Files.write(filePath, out.toByteArray());
+			processLargeFile("");
+
+		}
 	}
- }
-		
 
 	@SuppressWarnings({ "unused", "deprecation" })
 	private void processChunk(List<CSVRecord> chunk) throws IOException {
-		
+
 		Path filePath = Paths.get("teste.csv");
-		
-		
-		if(!Files.exists(filePath)) {
+
+		if (!Files.exists(filePath)) {
 			Files.createFile(filePath);
 		}
-		
-		String[] HEADERS = {"Year", "Age", "Ethnic", "Sex", "Area", "count"};
-		
-		CSVFormat format = CSVFormat.DEFAULT.builder()
-                .setHeader(HEADERS)
-                .build();
-		
+
+		String[] HEADERS = { "Year", "Age", "Ethnic", "Sex", "Area", "count" };
+
+		CSVFormat format = CSVFormat.DEFAULT.builder().setHeader(HEADERS).build();
+
 		try (BufferedWriter writer = Files.newBufferedWriter(Paths.get("teste.csv"))) {
-			
-            try (CSVPrinter csvPrinter = new CSVPrinter(writer, format)) {
+
+			try (CSVPrinter csvPrinter = new CSVPrinter(writer, format)) {
 				chunk.forEach(record -> {
 					try {
 						csvPrinter.printRecord(record);
@@ -108,7 +102,11 @@ public class VirtualThreadFileProcessor {
 	}
 
 	public static void main(String[] args) throws IOException {
-			
+
+		Instant start = Instant.now();
 		new VirtualThreadFileProcessor().processLargeFileChannel("");
+		Instant end = Instant.now();
+		Duration timeElapsed = Duration.between(start, end);
+		System.out.println("Execution time: " + timeElapsed.toSeconds() + " milliseconds");
 	}
 }

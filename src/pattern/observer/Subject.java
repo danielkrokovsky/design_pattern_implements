@@ -3,9 +3,9 @@ package pattern.observer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Subject implements ISubject{
-	
-	List<Observer> observerList = new ArrayList<Observer>();
+public class Subject implements ISubject {
+
+	private List<Observer> observerList = new ArrayList<Observer>();
 	private int flag;
 
 	@Override
@@ -20,10 +20,11 @@ public class Subject implements ISubject{
 
 	@Override
 	public void notifyObserver(int value) {
-		
+
 		for (int i = 0; i < observerList.size(); i++) {
 			observerList.get(i).update(this.getClass().getSimpleName(), value);
-		    }
+		}
+
 	}
 
 	public int getFlag() {
@@ -39,5 +40,5 @@ public class Subject implements ISubject{
 	public String toString() {
 		return "Subject [observerList=" + observerList + ", flag=" + flag + "]";
 	}
-	
+
 }
