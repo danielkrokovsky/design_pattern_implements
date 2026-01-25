@@ -3,10 +3,7 @@
 
 Implementation of the examples presented in the book Design Patterns [Java Design Patterns](https://www.amazon.com.br/Design-Patterns-English-Vaskaran-Sarcar-ebook/dp/B01JFVAICY).
 
-<center>
 <img src="img/capa.png"/>
-</center>
-
 
 **A.** Creational Patterns:
 These patterns mainly deal with the instantiation process. Here we make the systems independent from how their objects are created, collected, or represented. The following five patterns fall into this category:       
