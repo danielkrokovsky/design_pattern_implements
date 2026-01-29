@@ -9,6 +9,7 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -25,28 +26,63 @@ public class VirtualThreadFileProcessor {
 
 	private String s = "Data8277.csv";
 	@SuppressWarnings("unused")
-	private Path filePath = Paths.get("teste.csv");
+	private Path filePath = Paths.get("Data8277.csv");
 
 	public void processLargeFile(String file) throws IOException {
-
+		
 		List<Data> records = new ArrayList<>();
 		String delimiter = ",";
 
+		long s1, s2;
+		
+		s1 = System.currentTimeMillis();
 		try (var _ = Executors.newVirtualThreadPerTaskExecutor()) {
-
-			try (Stream<String> lines = Files.lines(Paths.get(s))) {
-				records = lines.skip(1).map(line -> line.split(delimiter))
-						.map(n -> new Data.Builder(n[0], n[1], n[2], n[3], n[4], n[5]).build())
-						.collect(Collectors.toList());
+			
+			try (Stream<String> lines = Files.lines(filePath)) {
+				records = lines
+							.parallel()
+							.skip(1)
+							.map(line -> line.split(delimiter))
+							.map(n -> new Data.Builder(n[0], n[1], n[2], n[3], n[4], n[5]).build())
+							.collect(Collectors.toList());
 
 				System.out.println(records.size());
 
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+
+			s2 = System.currentTimeMillis();
 		}
 
-		System.out.println(records.get(0));
+		System.out.println("Time taken: "+(s2-s1)+"ms");
+	}
+	
+	public void processFileChannel(String file) throws IOException {
+		
+		List<Data> records = new ArrayList<>();
+		String delimiter = ",";
+
+		long s1, s2;
+		
+		s1 = System.currentTimeMillis();
+		
+		try (var _ = Executors.newVirtualThreadPerTaskExecutor()) {
+			
+			FileChannel channel = FileChannel.open(filePath, StandardOpenOption.READ);
+			ByteBuffer bbf = ByteBuffer.allocate(4096);
+			
+			while (channel.read(bbf) > 0) {
+				
+				bbf.flip();
+				bbf.clear();
+				
+			}
+			
+			s2 = System.currentTimeMillis();
+		}
+
+		System.out.println("Time taken: "+(s2-s1)+"ms");
 	}
 
 	@SuppressWarnings("unused")
@@ -65,9 +101,6 @@ public class VirtualThreadFileProcessor {
 				out.write(buff.array(), 0, buff.position());
 				buff.clear();
 			}
-
-			// Files.write(filePath, out.toByteArray());
-			processLargeFile("");
 
 		}
 	}
@@ -101,12 +134,7 @@ public class VirtualThreadFileProcessor {
 		}
 	}
 
-	public static void main(String[] args) throws IOException {
-
-		Instant start = Instant.now();
-		new VirtualThreadFileProcessor().processLargeFileChannel("");
-		Instant end = Instant.now();
-		Duration timeElapsed = Duration.between(start, end);
-		System.out.println("Execution time: " + timeElapsed.toSeconds() + " milliseconds");
+	public static void main(String[] args) {
+		
 	}
 }
