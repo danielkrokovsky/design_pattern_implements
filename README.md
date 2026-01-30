@@ -39,7 +39,7 @@ Here our concentration is on algorithms and the assignment of the critical respo
 :white_large_square: Mediator Pattern<br>
 :white_check_mark: Strategy Pattern<br>
 :white_large_square: Chain of Responsibility Pattern<br>
-:white_large_square: Visitor Pattern<br>
+:white_check_mark: Visitor Pattern<br>
 :white_large_square: Interpreter Pattern<br>
 :white_check_mark: Memento Pattern
 
