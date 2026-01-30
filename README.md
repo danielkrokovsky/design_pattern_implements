@@ -1,4 +1,3 @@
-:white_check_mark::white_large_square
 # Java Design Patterns:A tour of 23 gang of four design patterns in Java
 
 Implementation of the examples presented in the book Design Patterns [Java Design Patterns](https://www.amazon.com.br/Design-Patterns-English-Vaskaran-Sarcar-ebook/dp/B01JFVAICY).
