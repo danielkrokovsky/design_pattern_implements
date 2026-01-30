@@ -19,7 +19,7 @@ These patterns mainly deal with the instantiation process. Here we make the syst
 **B.** Structural Patterns:
 Here we focus on how objects and classes are associated or can be composed to make relatively large structures. Inheritance mechanisms are mostly used to combine interfaces or implementations. The following seven patterns fall into this category:
 
-:white_large_square: Proxy Pattern<br>
+:white_check_mark: Proxy Pattern<br>
 :white_large_square: Flyweight Pattern<br>
 :white_large_square: Bridge Pattern<br>
 :white_check_mark: Facade Pattern<br>
