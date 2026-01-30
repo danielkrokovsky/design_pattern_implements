@@ -31,7 +31,7 @@ Here we focus on how objects and classes are associated or can be composed to ma
 Here our concentration is on algorithms and the assignment of the critical responsibilities among the objects. We also need to focus on the communication between them. We need to take a closer look at the way those objects are interconnected. The following 11 patterns fall into this category.
 
 :white_check_mark: Observer Pattern<br>
-:white_large_square: Template Method Pattern<br>
+:white_check_mark: Template Method Pattern<br>
 :white_check_mark: Command Pattern<br>
 :white_check_mark: Iterator Pattern<br>
 :white_check_mark: State Pattern<br>
